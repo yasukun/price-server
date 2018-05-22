@@ -3,9 +3,9 @@ protocol = "binary"     # Specify the protocol (binary, compact, json, simplejso
 framed = false          # Use framed transport
 buffered = false        # Use buffered transport
 addr = "localhost:9090" # Address to listen to
-secure = true           # Use tls secure transport
+secure = false          # Use tls secure transport
 
 [ledisdb]
-addr = "localhost:6379"
+addr = "localhost:6380"
 password = ""
 db = 0

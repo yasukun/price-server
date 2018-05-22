@@ -30,6 +30,7 @@ import (
 	"price"
 
 	"git.apache.org/thrift.git/lib/go/thrift"
+	"github.com/go-redis/redis"
 	"github.com/yasukun/price-server/lib"
 )
 
@@ -53,7 +54,12 @@ func runServer(transportFactory thrift.TTransportFactory, protocolFactory thrift
 		return err
 	}
 	fmt.Printf("%T\n", transport)
-	handler := NewPriceHandler()
+	client := redis.NewClient(&redis.Options{
+		Addr:     conf.Ledisdb.Addr,
+		Password: conf.Ledisdb.Password,
+		DB:       conf.Ledisdb.DB,
+	})
+	handler := NewPriceHandler(client)
 	processor := price.NewPriceServiceProcessor(handler)
 	server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 

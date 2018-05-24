@@ -32,11 +32,12 @@ type Config struct {
 }
 
 type MainConfig struct {
-	Protocol  string `toml:"protocol"`
-	Framed    bool   `toml:"framed"`
-	Bufferd   bool   `toml:"buffered"`
-	Addr      string `toml:"addr"`
-	Secure    bool   `toml:"secure"`
+	Protocol string `toml:"protocol"`
+	Framed   bool   `toml:"framed"`
+	Bufferd  bool   `toml:"buffered"`
+	Addr     string `toml:"addr"`
+	Secure   bool   `toml:"secure"`
+	Dummy    bool   `toml:"dummy"`
 }
 
 type LedisdbConfig struct {

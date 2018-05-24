@@ -54,13 +54,20 @@ func runServer(transportFactory thrift.TTransportFactory, protocolFactory thrift
 		return err
 	}
 	fmt.Printf("%T\n", transport)
-	client := redis.NewClient(&redis.Options{
-		Addr:     conf.Ledisdb.Addr,
-		Password: conf.Ledisdb.Password,
-		DB:       conf.Ledisdb.DB,
-	})
-	handler := NewPriceHandler(client)
-	processor := price.NewPriceServiceProcessor(handler)
+	var processor *price.PriceServiceProcessor
+	if conf.Main.Dummy {
+		handler := NewDummyHandler()
+		processor = price.NewPriceServiceProcessor(handler)
+	} else {
+		client := redis.NewClient(&redis.Options{
+			Addr:     conf.Ledisdb.Addr,
+			Password: conf.Ledisdb.Password,
+			DB:       conf.Ledisdb.DB,
+		})
+		handler := NewPriceHandler(client)
+		processor = price.NewPriceServiceProcessor(handler)
+	}
+
 	server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 
 	fmt.Println("Starting the price server... on ", conf.Main.Addr)
